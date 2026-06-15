@@ -12,7 +12,6 @@
 from app.agents.scope_agent import scope_agent
 
 def scope_node(state):
-
     text = (
         state["human_message"]
         if state.get("human_message")

@@ -89,7 +89,7 @@ def planner_agent(user_prompt: str) -> ProjectPlan:
     )
 
     content = response.choices[0].message.content
-    print(f"planner_agent:-------------------\n{response.choices[0].message}")
+    print(f"\n\nplanner_agent:-------------------\n{content}")
 
     # Remove markdown fences if model adds them
     content = content.replace("```json", "")

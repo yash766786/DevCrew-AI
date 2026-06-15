@@ -39,8 +39,10 @@ def intent_agent(message: str):
         ]
     )
 
-    print(f"scope agent:---------------------\n{response.choices[0].message}")
+    content = response.choices[0].message.content
+    print(f"\n\nintent_agent:-------------------\n{content}")
 
     return json.loads(
         response.choices[0].message.content
     )
+

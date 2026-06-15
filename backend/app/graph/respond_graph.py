@@ -1,12 +1,9 @@
 # app/graph/respond_graph.py
 from langgraph.graph import StateGraph, END
-
 from app.graph.state import ProjectState
-
 from app.graph.nodes.intent_node  import intent_node 
 from app.graph.nodes.scope_node import scope_node
 from app.graph.nodes.plan_editor_node import plan_editor_node
-
 from app.graph.routers import intent_router, modification_scope_router
 
 

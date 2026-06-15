@@ -10,19 +10,3 @@ def planner_node(state):
         "status": "awaiting_approval"
     }
 
-
-# def planner_node(state):
-
-#     plan = planner_agent(
-#         state["prompt"]
-#     )
-
-#     return {
-#         "plan": plan.model_dump(),
-
-#         "plan_summary": (
-#             f"Project: {plan.project_name}\n"
-#             f"Theme: {plan.theme}\n"
-#             f"Sections: {', '.join(plan.sections)}"
-#         )
-#     }

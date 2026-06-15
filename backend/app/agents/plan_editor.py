@@ -44,7 +44,7 @@ USER FEEDBACK:
     )
 
     content = response.choices[0].message.content
-    print(f"planner_editor_agent:-------------------\n{response.choices[0].message}")
+    print(f"\n\nplan_editor_agent:-------------------\n{content}")
 
     # Remove markdown fences if model adds them
     content = content.replace("```json", "")

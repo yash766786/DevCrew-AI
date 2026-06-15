@@ -11,7 +11,7 @@ TEMPLATE_DIR = BASE_DIR / "templates" / "nextjs"
 def scaffold_project(project_id: str):
     workspace = get_workspace(project_id)
 
-    print("Template Path:", TEMPLATE_DIR)
+    print("\n\nTemplate Path:", TEMPLATE_DIR)
     print("Exists:", TEMPLATE_DIR.exists())
 
     shutil.copytree(

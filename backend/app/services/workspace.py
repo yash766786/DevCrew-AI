@@ -14,7 +14,7 @@ def create_workspace(project_id: str) -> Path:
     """
 
     project_path = PROJECTS_ROOT / project_id
-    print("Projects Root:", PROJECTS_ROOT)
+    print("\n\nProjects Root:", PROJECTS_ROOT)
 
     project_path.mkdir(
         parents=True,
@@ -26,3 +26,4 @@ def create_workspace(project_id: str) -> Path:
 
 def get_workspace(project_id: str) -> Path:
     return PROJECTS_ROOT / project_id
+

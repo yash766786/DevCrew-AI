@@ -1,43 +1,101 @@
+# import socket
 import subprocess
-from pathlib import Path
+from app.tools.file_tools import get_workspace
 
 IMAGE_NAME = "ai-nextjs-runner"
 preview_sessions = {}
 BASE_PORT = 3001
 
 
-def get_next_port():
-    return BASE_PORT + len(preview_sessions)
+# def get_free_port(start=3008):
+#     port = start
+
+#     while True:
+#         with socket.socket() as s:
+#             try:
+#                 s.bind(("localhost", port))
+#                 return port
+#             except OSError:
+#                 port += 1
 
 
-def start_preview(project_id: str, workspace: Path): 
+def get_free_port(start=3004):
+    used_ports = set()
 
+    result = subprocess.run(
+        ["docker", "ps", "--format", "{{.Ports}}"],
+        capture_output=True,
+        text=True
+    )
+
+    for line in result.stdout.splitlines():
+        if "->" in line:
+            host_port = line.split("->")[0].split(":")[-1]
+            try:
+                used_ports.add(int(host_port))
+            except:
+                pass
+
+    port = start
+
+    while port in used_ports:
+        port += 1
+
+    return port
+
+
+def start_preview(project_id: str): 
     if project_id in preview_sessions:
         return preview_sessions[project_id]
 
+    workspace = get_workspace(project_id)
     workspace = workspace.resolve()
 
-    port = get_next_port()
-
+    port = get_free_port()
     container_name = f"preview-{project_id[:8]}"
 
+    # command = [
+    #     "docker",
+    #     "run",
+    #     "-d",
+    #     "--rm",
+    #     "--name",
+    #     container_name,
+    #     "-p",
+    #     f"{port}:3000",
+    #     "-v",
+    #     f"{workspace}:/app",
+    #     IMAGE_NAME,
+    #     "sh",
+    #     "-c",
+    #     "npm run dev -- --hostname 0.0.0.0"
+    # ]
+    print("Using shared node_modules volume")
     command = [
-        "docker",
-        "run",
-        "-d",
-        "--rm",
-        "--name",
-        container_name,
-        "-p",
-        f"{port}:3000",
-        "-v",
-        f"{workspace}:/app",
-        IMAGE_NAME,
-        "sh",
-        "-c",
-        "npm install && npm run dev -- --hostname 0.0.0.0"
-    ]
+       "docker",
+       "run",
+       "-d",
+       "--rm",
+       "--name",
+       container_name,
 
+       "-p",
+       f"{port}:3000",
+
+       "-v",
+       f"{workspace}:/app",
+
+       "-v",
+       "nextjs_node_modules:/app/node_modules",
+
+       IMAGE_NAME,
+
+       "sh",
+       "-c",
+       "npm run dev -- --hostname 0.0.0.0"
+    ]
+    
+    print(f"\nSelected Port: {port}")
     result = subprocess.run(
         command,
         capture_output=True,
@@ -49,10 +107,13 @@ def start_preview(project_id: str, workspace: Path):
 
     preview_sessions[project_id] = {
         "container_name": container_name,
-        "port": port
+        "port": port,
+        "preview_url": f"http://localhost:{port}"
     }
 
-    print(f"preview session:-----------------------\n{preview_sessions}\n\n\n")
+    print(f"\n\npreview session:-----------------------\n{preview_sessions}")
+    print("Docker stdout:", result.stdout)
+    print("Docker stderr:", result.stderr)
 
     return preview_sessions[project_id]
 

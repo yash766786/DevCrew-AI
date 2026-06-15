@@ -5,7 +5,6 @@ SYSTEM_PROMPT = """
 You are a Next.js build reviewer.
 
 Rules:
-
 1. Preserve functionality.
 2. Fix only build errors.
 3. Do not simplify the application.
@@ -14,11 +13,7 @@ Rules:
 """
 
 
-def reviewer_agent(
-    code: str,
-    build_error: str
-):
-
+def reviewer_agent(code: str, build_error: str):
     client = get_llm()
 
     response = client.chat.completions.create(
@@ -45,4 +40,7 @@ BUILD ERROR:
         ]
     )
 
-    return response.choices[0].message.content
+    content = response.choices[0].message.content
+    print(f"\n\nreviewer_agent:-------------------\n{content}")
+
+    return content

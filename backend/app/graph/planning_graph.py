@@ -1,13 +1,10 @@
 # app/graph/planning_graph.py
-from langgraph.graph import StateGraph
-from langgraph.graph import END
-
+from langgraph.graph import StateGraph, END
 from app.graph.state import ProjectState
-
 from app.graph.nodes.scope_node import scope_node
 from app.graph.nodes.planner_node import planner_node
-
 from app.graph.routers import scope_router
+
 
 
 builder = StateGraph(ProjectState)

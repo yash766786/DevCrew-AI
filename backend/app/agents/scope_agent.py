@@ -54,8 +54,7 @@ def scope_agent(prompt: str):
         ]
     )
 
-    print(f"scope_agent:-------------------\n{response.choices[0].message}")
+    content = response.choices[0].message.content
+    print(f"\n\nscope_agent:-------------------\n{content}")
 
-    return json.loads(
-        response.choices[0].message.content
-    )
+    return json.loads(content)

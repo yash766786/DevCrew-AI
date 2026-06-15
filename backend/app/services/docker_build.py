@@ -1,27 +1,43 @@
 import subprocess
 from pathlib import Path
-
+from app.tools.file_tools import get_workspace
 
 IMAGE_NAME = "ai-nextjs-runner"
 
+def build_project_in_docker(project_id: Path):
+    workspace = get_workspace(project_id)
+    workspace = workspace.resolve()
+    print(f"\n\nworkspce:------\n{workspace}")
 
-def build_project_in_docker(project_path: Path):
-    project_path = project_path.resolve()
-
+    # command = [
+    #     "docker",
+    #     "run",
+    #     "--rm",
+    #     "-v",
+    #     f"{workspace}:/app",
+    #     IMAGE_NAME,
+    #     "sh",
+    #     "-c",
+    #     "npm install && npm run build"
+    # ]
+    print("Using shared node_modules volume")
     command = [
         "docker",
         "run",
         "--rm",
+    
         "-v",
-        f"{project_path}:/app",
+        f"{workspace}:/app",
+    
+        "-v",
+        "nextjs_node_modules:/app/node_modules",
+    
         IMAGE_NAME,
+    
         "sh",
         "-c",
-        "npm install && npm run build"
+        "npm run build"
     ]
-
-    print("Running Docker Build:")
-    print(" ".join(command))
 
     process = subprocess.run(
         command,
@@ -29,7 +45,9 @@ def build_project_in_docker(project_path: Path):
         text=True
     )
 
-    print(process)
+    print(f"\n\nRunning Docker Build:----")
+    print(" ".join(command))
+    print(f"\nprocess:---\n{process.returncode}\n{process.stderr}\n{process.stdout}")
 
     return {
         "success": process.returncode == 0,
@@ -37,3 +55,4 @@ def build_project_in_docker(project_path: Path):
         "build_output": process.stdout,
         "build_error": process.stderr
     }
+

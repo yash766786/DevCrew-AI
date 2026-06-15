@@ -1,7 +1,5 @@
-import re
-
 from app.services.llm import get_llm
-from app.tools.file_tools import write_file
+from app.tools.file_tools import write_file, clean_code
 
 
 SYSTEM_PROMPT = """
@@ -25,14 +23,6 @@ Rules:
 "use client"
 at the top of the file.
 """
-
-
-def clean_code(content: str):
-    content = re.sub(r"```tsx", "", content)
-    content = re.sub(r"```ts", "", content)
-    content = re.sub(r"```", "", content)
-
-    return content.strip()
 
 
 def developer_agent(project_id: str, plan: dict):
@@ -74,10 +64,7 @@ Requirements:
         ]
     )
 
-    # print(f"\n\ndeveloper agent:----------------\n{response.choices[0].message}")
     page_content = response.choices[0].message.content
-
-
     page_content = clean_code(page_content)
 
     layout_content = """
@@ -103,84 +90,15 @@ export default function RootLayout({
             "Missing export default"
         )
 
-    print("=" * 50)
-    print("ORIGINAL GENERATED CODE")
-    print(page_content)
-    print("=" * 50)
 
-    print("Generated Length:", len(page_content))
-    print("Last 200 chars:")
-    print(page_content[-200:])
+    print(f"\n\ndeveloper_agent:-------------------")
+    print("Generated Length:-", len(page_content))
+    print(f"Last 200 chars:---\n{page_content[-200:]}")
 
-    write_file(
-        project_id,
-        "app/page.tsx",
-        page_content
-    )
-
-    write_file(
-        project_id,
-        "app/layout.tsx",
-        layout_content
-    )
+    write_file(project_id, "app/page.tsx", page_content)
+    write_file(project_id, "app/layout.tsx", layout_content)
 
     return {
         "status": "generated"
     }
-
-
-def developer_fix_agent(
-    code: str,
-    fix_instructions: str
-):
-
-    client = get_llm()
-
-    response = client.chat.completions.create(
-        model="openai/gpt-oss-20b",
-        temperature=0,
-        max_tokens=4000,
-        messages=[
-            {
-                "role": "system",
-                "content": """
-You are fixing a Next.js page.
-
-Rules:
-
-1. Preserve all original functionality.
-2. Preserve all UI sections.
-3. Do not remove features.
-4. Do not return placeholder content.
-5. Do not return "Hello World".
-6. Only make the minimal changes required to pass the build.
-7. Return the full corrected TSX file.
-"""
-            },
-            {
-                "role": "user",
-                "content": f"""
-CURRENT CODE:
-
-{code}
-
-
-FIX INSTRUCTIONS:
-
-{fix_instructions}
-"""
-            }
-        ]
-    )
-
-    content = response.choices[0].message.content
-
-    content = clean_code(content)
-
-    print("=" * 50)
-    print("FIXED CODE")
-    print(content)
-    print("=" * 50)
-
-    return content
 

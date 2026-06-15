@@ -1,7 +1,5 @@
-import re
-
 from app.services.llm import get_llm
-
+from app.tools.file_tools import clean_code
 
 SYSTEM_PROMPT = """
 You are a senior Next.js engineer.
@@ -22,20 +20,7 @@ Your task:
 - No explanations
 """
 
-
-def clean_code(content: str):
-    content = re.sub(r"```tsx", "", content)
-    content = re.sub(r"```ts", "", content)
-    content = re.sub(r"```", "", content)
-
-    return content.strip()
-
-
-def editor_agent(
-    current_code: str,
-    user_request: str
-):
-
+def editor_agent(current_code: str, user_request: str):
     client = get_llm()
 
     response = client.chat.completions.create(
@@ -51,12 +36,10 @@ def editor_agent(
                 "role": "user",
                 "content": f"""
 CURRENT CODE:
-
 {current_code}
 
 
 MODIFICATION REQUEST:
-
 {user_request}
 """
             }
@@ -64,5 +47,8 @@ MODIFICATION REQUEST:
     )
 
     content = response.choices[0].message.content
+    print(f"\n\neditor_agent:-------------------\n{content}")
 
     return clean_code(content)
+
+

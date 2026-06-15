@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 from app.services.workspace import get_workspace
 
@@ -30,4 +31,12 @@ def list_files(project_id: str):
             files.append(str(file.relative_to(workspace)))
 
     return files
+
+
+def clean_code(content: str):
+    content = re.sub(r"```tsx", "", content)
+    content = re.sub(r"```ts", "", content)
+    content = re.sub(r"```", "", content)
+
+    return content.strip()
 
