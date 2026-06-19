@@ -14,8 +14,6 @@ def build_with_retry(
     attempt = 0
 
     while attempt < max_attempts:
-
-        # result = build_project(workspace)
         result = build_project_in_docker(workspace)
 
         if result["success"]:

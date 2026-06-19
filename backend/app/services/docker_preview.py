@@ -134,27 +134,6 @@ def restart_preview(project_id: str):
     return start_preview(project_id, port=old_port)
 
 
-# def stop_preview(project_id: str):
-#     session = preview_sessions.get(project_id)
-
-#     if not session:
-#         return False
-
-#     subprocess.run(
-#         [
-#             "docker",
-#             "stop",
-#             session["container_name"]
-#         ],
-#         capture_output=True
-#     )
-
-#     del preview_sessions[project_id]
-
-#     return True
-
-
-
 def stop_preview(project_id: str):
     session = preview_sessions.get(project_id)
 

@@ -10,8 +10,6 @@ from app.graph.modify_graph import modify_graph
 from app.services.zip_service import create_project_zip
 from app.services.workspace import get_workspace
 
-
-
 router = APIRouter()
 
 @router.post("/projects")

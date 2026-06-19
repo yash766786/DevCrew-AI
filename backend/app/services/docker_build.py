@@ -9,17 +9,6 @@ def build_project_in_docker(project_id: Path):
     workspace = workspace.resolve()
     print(f"\n\nworkspce:------\n{workspace}")
 
-    # command = [
-    #     "docker",
-    #     "run",
-    #     "--rm",
-    #     "-v",
-    #     f"{workspace}:/app",
-    #     IMAGE_NAME,
-    #     "sh",
-    #     "-c",
-    #     "npm install && npm run build"
-    # ]
     print("Using shared node_modules volume")
     command = [
         "docker",
