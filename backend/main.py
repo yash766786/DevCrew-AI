@@ -13,14 +13,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.api.planner import router as planner_router
-app.include_router(planner_router)
+import asyncio
+import app.websocket.manager as ws_manager
 
-@app.get("/")
-def root():
-    return {
-        "message": "Backend Running"
-    }
+@app.on_event("startup")
+async def startup_event():
+    ws_manager.main_loop = asyncio.get_running_loop()
+
+    print("MAIN LOOP SAVED")
+
+from app.api.project import router as project_router
+from app.api.ws import router as ws_router
+
+app.include_router(project_router)
+app.include_router(ws_router)
 
 
 @app.get("/health")

@@ -6,7 +6,6 @@ SYSTEM_PROMPT = """
 You are fixing a Next.js page.
 
 Rules:
-
 1. Preserve all original functionality.
 2. Preserve all UI sections.
 3. Do not remove features.

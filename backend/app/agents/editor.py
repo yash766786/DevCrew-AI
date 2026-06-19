@@ -5,12 +5,10 @@ SYSTEM_PROMPT = """
 You are a senior Next.js engineer.
 
 You will receive:
-
 1. Existing page.tsx code
 2. User modification request
 
 Your task:
-
 - Modify the existing code
 - Preserve existing functionality
 - Apply requested changes

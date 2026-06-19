@@ -2,6 +2,9 @@
 import subprocess
 from app.tools.file_tools import get_workspace
 
+import time
+import requests
+
 IMAGE_NAME = "ai-nextjs-runner"
 preview_sessions = {}
 BASE_PORT = 3001
@@ -44,32 +47,18 @@ def get_free_port(start=3004):
     return port
 
 
-def start_preview(project_id: str): 
+def start_preview(project_id: str, port: int | None = None): 
     if project_id in preview_sessions:
         return preview_sessions[project_id]
 
     workspace = get_workspace(project_id)
     workspace = workspace.resolve()
 
-    port = get_free_port()
+    if port is None:
+        port = get_free_port()
+    
     container_name = f"preview-{project_id[:8]}"
 
-    # command = [
-    #     "docker",
-    #     "run",
-    #     "-d",
-    #     "--rm",
-    #     "--name",
-    #     container_name,
-    #     "-p",
-    #     f"{port}:3000",
-    #     "-v",
-    #     f"{workspace}:/app",
-    #     IMAGE_NAME,
-    #     "sh",
-    #     "-c",
-    #     "npm run dev -- --hostname 0.0.0.0"
-    # ]
     print("Using shared node_modules volume")
     command = [
        "docker",
@@ -92,7 +81,7 @@ def start_preview(project_id: str):
 
        "sh",
        "-c",
-       "npm run dev -- --hostname 0.0.0.0"
+       "npm run start -- --hostname 0.0.0.0"
     ]
     
     print(f"\nSelected Port: {port}")
@@ -104,6 +93,22 @@ def start_preview(project_id: str):
 
     if result.returncode != 0:
         raise Exception(result.stderr)
+
+    # Wait until Next.js is ready
+    preview_url = f"http://localhost:{port}"
+
+    print("Waiting for preview server...")
+    for _ in range(30):
+        try:
+            response = requests.get(preview_url, timeout=2)
+            if response.status_code == 200:
+                print("Preview ready!")
+                break
+
+        except Exception:
+            pass
+
+        time.sleep(1)
 
     preview_sessions[project_id] = {
         "container_name": container_name,
@@ -118,25 +123,57 @@ def start_preview(project_id: str):
     return preview_sessions[project_id]
 
 
-def stop_preview(project_id: str):
+def restart_preview(project_id: str):
+    old_session = preview_sessions.get(project_id)
+    old_port = None
 
+    if old_session:
+        old_port = old_session["port"]
+        stop_preview(project_id)
+
+    return start_preview(project_id, port=old_port)
+
+
+# def stop_preview(project_id: str):
+#     session = preview_sessions.get(project_id)
+
+#     if not session:
+#         return False
+
+#     subprocess.run(
+#         [
+#             "docker",
+#             "stop",
+#             session["container_name"]
+#         ],
+#         capture_output=True
+#     )
+
+#     del preview_sessions[project_id]
+
+#     return True
+
+
+
+def stop_preview(project_id: str):
     session = preview_sessions.get(project_id)
 
     if not session:
-        return False
+        return
+
+    container_name = session["container_name"]
+    print(f"\nStopping Preview: {container_name}")
 
     subprocess.run(
         [
             "docker",
             "stop",
-            session["container_name"]
+            container_name
         ],
-        capture_output=True
+        capture_output=True,
+        text=True
     )
-
-    del preview_sessions[project_id]
-
-    return True
+    preview_sessions.pop(project_id, None)
 
 
 def get_preview_status(project_id: str):

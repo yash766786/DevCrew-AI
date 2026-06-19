@@ -1,5 +1,4 @@
 # app/services/project_store.py
-
 projects = {}
 
 # db_project = Project(

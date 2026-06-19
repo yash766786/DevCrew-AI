@@ -1,6 +1,9 @@
 from typing import TypedDict
 
 class ProjectState(TypedDict):
+    # SESSION
+    session_id: str
+
     # PROJECT
     project_id: str
     prompt: str
@@ -35,5 +38,7 @@ class ProjectState(TypedDict):
 
     # STATUS
     status: str
+
+    assistant_response: str
 
     

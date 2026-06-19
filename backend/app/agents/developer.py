@@ -4,11 +4,9 @@ from app.tools.file_tools import write_file, clean_code
 
 SYSTEM_PROMPT = """
 You are a senior Next.js engineer.
-
 Create a SMALL working prototype.
 
 Rules:
-
 1. Generate ONLY app/page.tsx.
 2. Use a single file.
 3. No imports from custom components.

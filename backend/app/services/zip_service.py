@@ -10,12 +10,7 @@ IGNORE_DIRS = {
 
 def create_project_zip(project_path: Path, zip_path: Path):
 
-    with zipfile.ZipFile(
-        zip_path,
-        "w",
-        zipfile.ZIP_DEFLATED
-    ) as zipf:
-
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
         for file in project_path.rglob("*"):
 
             if not file.is_file():
