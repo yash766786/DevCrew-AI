@@ -50,6 +50,75 @@ def create_project(request: PlannerRequest):
     }
 
 
+# @router.post("/projects/{project_id}/respond")
+# def respond_to_plan(project_id: str, request: HumanFeedback):
+#     # ---------------- LOAD STATE ----------------
+#     project = projects.get(project_id)
+#     if not project:
+#         return {
+#             "error": "Project not found"
+#         }
+
+#     # ---------------- HUMAN FEEDBACK GRAPH ----------------
+#     result = respond_graph.invoke({
+#         **project,
+#         "human_message": request.message
+#     })
+
+#     # ---------------- APPROVED ----------------
+#     if result.get("action") == "approve":
+#         project.update(result)
+#         project["approved"] = True
+#         project["status"] = "approved"
+
+#         execution_result = execution_graph.invoke({
+#             **project,
+#             "generated": False,
+#             "build_success": False,
+#             "build_output": "",
+#             "build_error": "",
+#             "fix_instructions": "",
+#             "retry_count": 0,
+#             "preview_url": ""
+#         })
+
+#         project.update(execution_result)
+#         print(f"\nprojects2:----\n{projects}")
+
+#         return {
+#             "project_id": project_id,
+#             "status": execution_result["status"],
+#             "preview_url": execution_result["preview_url"]
+#         }
+
+#     # ---------------- MODIFICATION REJECTED ----------------
+
+#     if not result.get("scope_allowed", True):
+#         print(f"\nprojects:----\n{projects}")
+#         return {
+#             "project_id": project_id,
+#             "status": "rejected",
+#             "reason": result["scope_reason"]
+#         }
+
+#     # ---------------- PLAN UPDATED ----------------
+#     project.update(result)
+#     print(f"\nprojects:----\n{projects}")
+#     # return {
+#     #     "project_id": project_id,
+#     #     "status": "awaiting_approval",
+#     #     "plan": result["plan"],
+#     #     "summary": result["plan_summary"]
+#     # }
+#     return {
+#     "project_id": project_id,
+#     "status": execution_result["status"],
+#     "preview_url": execution_result["preview_url"],
+#     "build_success": execution_result.get("build_success", False),
+#     "retry_count": execution_result.get("retry_count", 0),
+#     "build_error": (execution_result.get("build_error") or "")[-500:],
+# }
+
 @router.post("/projects/{project_id}/respond")
 def respond_to_plan(project_id: str, request: HumanFeedback):
     # ---------------- LOAD STATE ----------------
@@ -88,7 +157,10 @@ def respond_to_plan(project_id: str, request: HumanFeedback):
         return {
             "project_id": project_id,
             "status": execution_result["status"],
-            "preview_url": execution_result["preview_url"]
+            "preview_url": execution_result["preview_url"],
+            "build_success": execution_result.get("build_success", False),
+            "retry_count": execution_result.get("retry_count", 0),
+            "build_error": (execution_result.get("build_error") or "")[-500:],
         }
 
     # ---------------- MODIFICATION REJECTED ----------------
@@ -110,7 +182,6 @@ def respond_to_plan(project_id: str, request: HumanFeedback):
         "plan": result["plan"],
         "summary": result["plan_summary"]
     }
-
 
 @router.post("/projects/{project_id}/modify")
 def modify_project(project_id: str, request: HumanFeedback):

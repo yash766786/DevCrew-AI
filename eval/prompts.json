@@ -1,0 +1,67 @@
+{
+  "_comment": "DevCrew AI benchmark dataset. in_scope = prompts the platform should build (single-page, frontend-only). out_of_scope = prompts the Scope Agent should reject. intents = plan-stage chat messages labeled approve/modify.",
+  "in_scope": [
+    {"id": "s01", "tier": "simple", "prompt": "Build a landing page for a coffee shop"},
+    {"id": "s02", "tier": "simple", "prompt": "Create a personal portfolio website for a photographer"},
+    {"id": "s03", "tier": "simple", "prompt": "Make a simple landing page for a yoga studio with a class schedule"},
+    {"id": "s04", "tier": "simple", "prompt": "Build a one-page website for a local bakery with a menu and contact info"},
+    {"id": "s05", "tier": "simple", "prompt": "Create a landing page for a mobile app called TaskNest"},
+    {"id": "s06", "tier": "simple", "prompt": "Design a minimal online resume page for a software engineer"},
+    {"id": "s07", "tier": "simple", "prompt": "Build a coming soon page with a countdown timer"},
+    {"id": "s08", "tier": "simple", "prompt": "Make a landing page for a dog walking service"},
+    {"id": "s09", "tier": "simple", "prompt": "Create a single-page website for a college tech fest"},
+    {"id": "s10", "tier": "simple", "prompt": "Build a landing page for an online web development course"},
+
+    {"id": "m01", "tier": "medium", "prompt": "Build a pricing page with three plans and a monthly/yearly toggle"},
+    {"id": "m02", "tier": "medium", "prompt": "Create a todo list app with add, complete and delete using local state"},
+    {"id": "m03", "tier": "medium", "prompt": "Build a portfolio site with a filterable project gallery"},
+    {"id": "m04", "tier": "medium", "prompt": "Create a landing page for an AI startup with features, testimonials and an FAQ accordion"},
+    {"id": "m05", "tier": "medium", "prompt": "Build a recipe page with an ingredient checklist and a servings adjuster"},
+    {"id": "m06", "tier": "medium", "prompt": "Create a weather dashboard UI with hard-coded sample data for five cities"},
+    {"id": "m07", "tier": "medium", "prompt": "Build a fitness tracker page with a workout log kept in local state"},
+    {"id": "m08", "tier": "medium", "prompt": "Make a restaurant page with a menu that filters by category"},
+    {"id": "m09", "tier": "medium", "prompt": "Build a product page for wireless headphones with a color picker and feature tabs"},
+    {"id": "m10", "tier": "medium", "prompt": "Create a quiz app with five questions and a final score screen"},
+
+    {"id": "h01", "tier": "hard", "prompt": "Build a kanban board with three columns where cards move between columns using buttons"},
+    {"id": "h02", "tier": "hard", "prompt": "Create an expense tracker with category totals and a simple bar chart drawn with CSS"},
+    {"id": "h03", "tier": "hard", "prompt": "Build a notes app with add, edit, delete and search using local state"},
+    {"id": "h04", "tier": "hard", "prompt": "Create a tic-tac-toe game with score tracking and a reset button"},
+    {"id": "h05", "tier": "hard", "prompt": "Build a pomodoro timer with start, pause, reset and a session counter"},
+    {"id": "h06", "tier": "hard", "prompt": "Create a calculator that keeps a history of the last 10 calculations"},
+    {"id": "h07", "tier": "hard", "prompt": "Build a SaaS analytics landing page with a sticky navbar and a dark/light theme switcher"},
+    {"id": "h08", "tier": "hard", "prompt": "Create a product launch page with several sections and CSS-only animations"},
+    {"id": "h09", "tier": "hard", "prompt": "Build a habit tracker with a weekly grid and a streak counter"},
+    {"id": "h10", "tier": "hard", "prompt": "Create a flashcard study app with a flip animation and a shuffle button"}
+  ],
+  "out_of_scope": [
+    {"id": "o01", "category": "database", "prompt": "Build an inventory management system backed by a PostgreSQL database"},
+    {"id": "o02", "category": "authentication", "prompt": "Create a social media app with user signup and login"},
+    {"id": "o03", "category": "payments", "prompt": "Build an online store with Stripe checkout"},
+    {"id": "o04", "category": "backend_api", "prompt": "Create a REST API for a blog using Express and MongoDB"},
+    {"id": "o05", "category": "mern", "prompt": "Build a full MERN stack chat application"},
+    {"id": "o06", "category": "django", "prompt": "Create a Django web app for managing student records"},
+    {"id": "o07", "category": "spring_boot", "prompt": "Build a Spring Boot service for employee payroll"},
+    {"id": "o08", "category": "microservices", "prompt": "Design a microservices architecture for a food delivery platform"},
+    {"id": "o09", "category": "mobile", "prompt": "Build an Android mobile app for tracking expenses"},
+    {"id": "o10", "category": "combined", "prompt": "Build a booking system with user accounts, a database and email confirmations"}
+  ],
+  "intents": [
+    {"message": "approve", "label": "approve"},
+    {"message": "Looks good, go ahead", "label": "approve"},
+    {"message": "Yes, build it", "label": "approve"},
+    {"message": "This is perfect, please generate it", "label": "approve"},
+    {"message": "Approved", "label": "approve"},
+    {"message": "Great plan, proceed", "label": "approve"},
+    {"message": "ok start building", "label": "approve"},
+
+    {"message": "Change the theme to dark mode", "label": "modify"},
+    {"message": "Add a pricing section", "label": "modify"},
+    {"message": "Looks good, but also add a testimonials section", "label": "modify"},
+    {"message": "Can you make the hero section more minimal?", "label": "modify"},
+    {"message": "Add a contact form section", "label": "modify"},
+    {"message": "Rename the project to Sunrise Cafe", "label": "modify"},
+    {"message": "I want a blue color scheme instead", "label": "modify"},
+    {"message": "Remove the footer section", "label": "modify"}
+  ]
+}

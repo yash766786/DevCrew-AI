@@ -1,0 +1,9 @@
+{
+  "run_id": "20261116-013217-4b797b8",
+  "date": "2026-11-16 01:32",
+  "commit": "4b797b8",
+  "base_url": "http://127.0.0.1:8000",
+  "model_note": "openai/gpt-oss-20b (Groq)",
+  "runs": 2,
+  "delay_seconds": 40.0
+}
